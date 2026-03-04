@@ -1,0 +1,529 @@
+📑 **Agenda for Week 7 Day 1: OOPs in TypeScript
+
+🎯 [Focus: Mastering Object-Oriented Programming Concepts in TypeScript]
+
+📆 [21st Feb. Saturday]
+
+🕝 Session Highlights
+
+⿡ Recap
+Quick review of previous learnings.
+
+⿢ Class & Objects
+
+Understanding the basics of classes and objects in TypeScript.
+Examples: Creating and using classes and objects.
+
+⿣ Constructors
+
+Role of constructors in initializing objects.
+Examples: Using parameterized and default constructors.
+
+⿤ Access Modifiers
+
+Understanding public, private, and protected access modifiers.
+Examples: Controlling access to class properties and methods.
+
+⿥ Inheritance
+
+Exploring the concept of inheritance for code reuse.
+Examples: Implementing single and multilevel inheritance.
+
+🕡 Wrap Up / Q&A
+
+📝 Keep your physical notebook and pen handy to sketch out ideas and test workflows!
+
+
+Agenda :
+
+1. Class and Object.
+2. Method and properties.
+3. Constructor.
+4. Accessmodifiers.
+5. Encapsulation.
+6. Inheritance.
+-------------------------------------------------------------------------------------
+
+Class and Object:
+
+
+Real life example of Class and Object, Properties and Methods:
+
+###  What is a *Class*?
+
+A *class* is like a *blueprint* or *template* for creating something.
+
+Think of it like this:
+When a car company (like Toyota) designs a new model — say the *Innova* — they first create a *design or blueprint*.
+That blueprint has details like:
+
+* The engine type
+* Number of seats
+* Fuel capacity
+* Basic shape and dimensions
+
+But the *blueprint itself is not a car* — it’s just a design or a plan.
+
+Script:
+-------
+
+class Car {
+
+//properties => variables
+
+accel="Accelerator";
+brake="Brakes"
+
+//methods => Actionables
+
+startEngine(){
+console.log("Press Accelerator")
+}
+
+stopEngine(){
+console.log("Press Brakes")
+}
+
+}
+
+const obj = new Car() // Object created
+obj.startEngine()
+obj.stopEngine()
+
+
+Example 2 with application login :
+-----------------------------------
+
+property :
+---------
+Represents the information or data related to a particular page or object
+(e.g., username, password, URL).
+
+method :
+-------- 
+Represents the actions or operations performed on that page or object
+(e.g., fill a field, click a button, submit a form).
+
+******************************************************************************************
+
+Sample Program :
+--------------
+
+
+******************************************************************************************
+Classroom Question:
+-------------------
+
+
+You are building a basic browser simulator for an automation framework.
+
+Design a Browser class in TypeScript that:
+
+Stores browser name and version as properties
+
+Uses this keyword inside a method to access class properties
+
+Uses template literals to print browser launch details
+
+Demonstrates the flow by creating an object and executing all actions
+
+****************************************************************************************
+Constructor:
+
+Definition
+A constructor in TypeScript is a method named constructor() that runs once at the time of object creation and sets up the initial state of the object.
+Or a Special method to initialize the object
+
+*******************************************************************************************
+
+
+class LoginPage{
+
+//Properties:
+------------
+
+username = "democsr2"
+password = "crmsfa"
+
+//Method :
+
+fill(){ // Method block--> block of code to perform an action
+//Actionables
+fill method
+use the properties "username" and "password" to perform the action to fill the login form
+}
+
+click(){
+//Actionables
+click method
+}
+}
+
+
+const lp = new LoginPage() // ✔️ Memory is allocated //syntax to create an object(reference/ instance/copy) for a class to call the methods(actionable blocks) inside the class 
+lp.fill()
+lp.click()
+
+----------------------
+
+class WelcomePage{
+click(){
+//Actionables
+click method
+}
+}
+const wp = new WelcomePage() // ✔️ Memory is allocated //syntax to create an object(reference/ instance/copy) for a class to call the methods(actionable blocks) inside the class 
+wp.click()
+
+
+
+function LoginPage(){ // function block
+//Actionables
+fill method
+click method
+
+}
+
+LoginPage()
+-------------------------------------------------------------------------------
+
+
+AccessModifiers:
+
+1. public : can be accessed inside and outside of the class
+2. protected: can be accessed inside the class as well as the related class --> relationship--> inherit
+3. private: not accessible outisde the class --> give permission to access or to rewrite "get" and "set"
+4. readonly: constant/final --> cannot change the assigned value
+5. static: belongs to the class and not to the object --> can be accessed without creating the object of the class.
+
+
+🔹 When do we use static in a TypeScript framework?
+
+We use static when the data or behavior is:
+
+✅ Common for the entire framework
+✅ Does NOT depend on object state
+✅ Utility / helper / configuration
+✅ Shared across tests, pages, or services
+
+1️⃣ Static for Constants & Configuration
+📌 Use case
+
+URLs
+Timeouts
+Environment names
+Browser types
+
+class Config {
+  static BASE_URL = "https://leaftaps.com";
+  static TIMEOUT = 5000;
+}
+
+Usage (no object needed)
+await page.goto(Config.BASE_URL);
+
+
+✔ Single source of truth
+✔ Easy to maintain
+
+*****************************************************************************************
+About super keyword :
+
+### `super` keyword in TypeScript — Simple & Clear Definition
+
+In **TypeScript (and JavaScript)**, the **`super` keyword** is used in a **child (derived) class** to **access the parent (base) class**.
+
+It is mainly used for **two purposes**:
+
+---
+
+## 1️⃣ Calling the Parent Class Constructor
+
+When a class **extends** another class, the child class **must call `super()`** before using `this`.
+
+### ✅ Definition
+
+> **`super()` calls the constructor of the parent class.**
+
+### Example
+
+```ts
+class LoginPage {
+  username: string;
+
+  constructor(username: string) {
+    this.username = username;
+  }
+}
+
+class DashboardPage extends LoginPage {
+  role: string;
+
+  constructor(username: string, role: string) {
+    super(username); // calls parent constructor
+    this.role = role;
+  }
+}
+
+const dp = new DashboardPage("admin", "manager");
+```
+
+📌 **Important rule**
+👉 `super()` **must be the first statement** in the child constructor.
+
+------------------------------------------------------------------------
+
+class Employee {
+
+    name: string;
+    age: number;
+
+    // Constructor Signatures (Overloading)
+    constructor(name: string);
+    constructor(name: string, age: number);
+
+    // Actual Constructor Implementation
+    constructor(name: string, age?: number) {
+        this.name = name;
+        this.age = age ?? 0;
+    }
+}
+
+// Usage
+let emp1 = new Employee("Ravi");
+let emp2 = new Employee("Ravi", 30);
+
+console.log(emp1);
+console.log(emp2);
+
+--------------------------------------------------------------------
+
+## 2️⃣ Accessing Parent Class Methods or Properties
+
+### ✅ Definition
+
+> **`super.methodName()` is used to call a method from the parent class.**
+
+### Example
+
+```ts
+class BasePage {
+  navigate() {
+    console.log("Navigating to page");
+  }
+}
+
+class HomePage extends BasePage {
+  openHome() {
+    super.navigate(); // calling parent method
+    console.log("Home page opened");
+  }
+}
+
+const home = new HomePage();
+home.openHome();
+```
+
+---
+
+## When Do We Use `super`? (Real-Time Use Case)
+
+Since you work with **Playwright + Page Object Model**, this is very common 👇
+
+```ts
+class BasePage {
+  protected page;
+
+  constructor(page) {
+    this.page = page;
+  }
+
+  async click(locator: string) {
+    await this.page.click(locator);
+  }
+}
+
+class LoginPage extends BasePage {
+  constructor(page) {
+    super(page); // pass page to BasePage
+  }
+
+  async login() {
+    await this.click("#login");
+  }
+}
+```
+
+🔹 `super(page)` passes the Playwright `page` object to the base class
+🔹 Avoids duplicate code
+🔹 Improves framework design
+
+---
+
+## Definition
+
+> **The `super` keyword in TypeScript is used to call the parent class constructor and access parent class methods or properties from a child class.**
+
+-------------------------------------------------------------------------------------
+
+faker library installation :
+
+npm install @faker-js/faker
+
+--------------------------------------------------------------------------------------
+
+When do we actually need child constructor?
+
+Only when child wants to:
+
+Accept new parameters
+
+Initialize new properties
+
+Add extra logic
+
+Modify parent behavior
+
+Example:
+
+class HR extends EmployeeSignUp {
+
+    department: string
+
+    constructor(dept: string) {
+        super()   // Parent initialization
+        this.department = dept // Child initialization
+    }
+}
+
+
+Now parent cannot handle this, because:
+
+Parent doesn't know what department is.
+
+So child needs its own constructor.
+
+---------------------------------------------------------------------------------------
+Inheritance :
+
+1. Single Inheritance :
+
+classA{}
+classB extends A{}
+
+2. Multilevel Inheritance :
+
+class A{}
+
+class B extends A{}
+class C extends B{}
+
+3. Hierarchical inheritance 
+
+class A{}
+
+class B extends A{}
+class C extends A{}
+
+4. Hybrid Inheritance
+
+A combination of two or more types of inheritnace (e.x : multilevel and Hierarchical)
+
+
+5. Multiple Inheritance
+Typescript does not support multiple inheritnace using classes.
+Can be achieved through interface.
+
+
+
+
+
+
+
+
+
+
+
+
+faker library installation :
+
+npm install @faker-js/faker
+
+
+
+Private accessmodifers scenarios example :
+
+
+
+Scenario 1 — Login System (Very Realistic)
+class User {
+
+  private password: string = "";
+
+  setPassword(pass: string) {
+
+    if(pass.length >= 8)
+      this.password = pass;
+    else
+      console.log("Weak password");
+
+  }
+
+}
+Why?
+
+Password must follow rules.
+-----------------
+
+Scenario 2 — Playwright Framework (Your Area)
+class LoginPage {
+
+  private url = "https://testleaf.com";
+
+  getURL() {
+    return this.url;
+  }
+
+}
+
+Why?
+
+Prevent test engineers from accidentally changing URL.
+
+---------------------------------
+
+Main Real-Time Reasons
+1️⃣ Data Security
+
+Hide sensitive data.
+
+Example:
+
+Password
+
+Salary
+
+Bank balance
+
+2️⃣ Validation
+
+Example:
+
+Age must be > 0
+Salary must be > 0
+Password length >= 8
+3️⃣ Prevent Mistakes
+
+Team members cannot accidentally modify values.
+
+4️⃣ Maintain Control
+
+Later you can change logic without affecting users.
+
+Example:
+
+getSalary() {
+ return this.salary * 1.1 // bonus added
+}
+
+Outside code unchanged.

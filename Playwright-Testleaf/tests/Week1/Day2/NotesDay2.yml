@@ -1,0 +1,288 @@
+📑 Agenda for Week 1 Day 2 - JavaScript Core Concepts
+🎯 [Focus: Strengthening JavaScript foundations]
+
+📆 Date: 11 Jan 2026 (Sunday)  
+
+🕝 Session Highlights
+
+ Recap of Day 1
+* Revisiting Key Takeaways  
+
+1. Mastering Variables var, let, const
+* Variable redeclaration, reassignment.
+* Variable Hoisting.
+
+************BREAK**************
+
+2. Functions  
+* Writing, Calling, and Optimizing Functions  
+
+3. Variable Scoping.
+
+**********Handson Acivity on var,let,const behaviour**************
+
+4. Operators & Conditional Statements
+* Building Logic and Decision-Making Skills  
+* [Practice]
+
+5. Diving into Loops
+* For Loops, While Loops, and Iteration Techniques  
+* Practice with Automation Use Cases  
+
+
+🕡 Wrap Up / Q&A 
+
+📝 Keep your physical notebook and pen handy to sketch out ideas!
+
+
+NotesWeek1Day2 :
+----------------
+
+Important terms to understand : 
+
+1. Declaration :
+---------------
+
+Declaration means creating a variable "x" and giving it a name using a keyword "var".
+
+This is to tell JavaScript that a variable exist (creating memory space) in the name of x using the keyword "var".
+
+🔹 No value is given yet and hence we term it as undefined.
+
+var x;
+
+
+Analogy : Declaration is like buying an empty lunch box and writing your name on it.
+👉 Lunch box exists, but it’s empty.
+
+------------------------------------
+
+2. Assignment
+--------------
+
+Assignment means giving a value to an already declared variable.
+
+x = 100;
+
+Analogy : Assignment is like putting food into an already bought lunch box.
+👉 Now the lunch box has food.
+
+--------------------------------------
+
+3. Initialization 
+
+Initialization means declaring a variable and assigning a value to it at the same time.
+
+var x = 100;
+
+Analogy : Initialization is like buying the lunch box AND putting food in it immediately.
+👉 Filling the empty named lunch box in one step.
+------------------------------------------------------------------------------------------------------------------
+
+Using the var keyword, we can store different kinds of values such as numbers, strings, booleans, undefined, and null.
+Each of these represents a single value and is called a Primitive Data Type.
+
+When we want to store a collection of values, like adding multiple products to a shopping cart, we use Arrays and Objects.
+
+Array → Collection of values (list)
+
+Object → Collection of values with names (key–value pairs)
+
+****************************************************************************************************************
+
+Real-life Ananlogy on the difference between var,let,const :
+
+🟨 var — You can rename the box and change the food
+🍱 Lunch box analogy
+
+Declaration → Buying a lunch box and naming it x
+Redeclaration → Writing the name x again on the same lunch box
+Assignment → Putting food in the box
+Reassignment → Replacing the food with something else
+
+With var, the lunch box is flexible — you can rename it again and again and change what’s inside.
+
+var rules :
+
+| Aspect                    | Redeclaration | Reassignment |
+| ------------------------- | ------------- | ------------ |
+| What repeats?             | Variable name | Value        |
+| Uses `var` keyword again? | Yes           | No           |
+| Changes memory?           | No            | No           |
+| Allowed with `var`?       | ✅ Yes         | ✅ Yes        |
+
+Example:
+-------
+
+var x = 10;   // Declaration + assignment
+var x = 20;  // ✅ Redeclaration allowed
+
+x = 30;      // ✅ Reassignment allowed
+
+
+------------------------------------------------------------------------
+
+🟦 let — You can change food, but you cannot rename the box
+🍱 Lunch box analogy
+
+Declaration → Buying a lunch box and naming it y
+Redeclaration → ❌ Not allowed (you cannot write the name y again on the same box)
+Assignment → Putting food in the box
+Reassignment → Replacing the food with something else
+
+| Aspect                    | Redeclaration | Reassignment |
+| ------------------------- | ------------- | ------------ |
+| What repeats?             | Variable name | Value        |
+| Uses `let` keyword again? | Yes ❌ (Error) | No           |
+| Changes memory?           | No            | No           |
+| Allowed with `let`?       | ❌ No          | ✅ Yes        |
+
+Example :
+--------
+
+let y = 10;   // Declaration + assignment
+let y = 20;  // ❌ Error (redeclaration not allowed)
+
+y = 30;      // ✅ Reassignment allowed
+
+------------------------------------------------------------------------
+
+🟥 const — You cannot change the box or the food
+🍱 Lunch box analogy
+
+Declaration → Buying a lunch box and naming it z
+Assignment → Putting food in the box (must be done immediately if not throws error in const)
+Redeclaration → ❌ Not allowed
+Reassignment → ❌ Not allowed
+
+Once food is placed, that lunch box becomes sealed forever 🔒
+
+| Aspect                      | Redeclaration | Reassignment |
+| --------------------------- | ------------- | ------------ |
+| What repeats?               | Variable name | Value        |
+| Uses `const` keyword again? | Yes ❌ (Error) | No ❌ (Error) |
+| Changes memory?             | No            | No           |
+| Allowed with `const`?       | ❌ No          | ❌ No         |
+
+Example :
+
+const z = 50;  // Declaration + assignment is mandatory
+const z = 60; // ❌ Error (no redeclaration)
+
+z = 70;       // ❌ Error (no reassignment)
+
+------------------------------------------------------------------------
+
+One-line summary:
+
+var → Rename the box & change the food
+
+let → Keep the same box, change the food
+
+const → Same box, same food forever
+
+***************************************************************************************************************
+
+Hoisting :
+---------
+
+Hoisting is JavaScript’s behavior of scanning the entire .js file before execution, 
+collecting all var declarations, and creating memory for them with the value undefined before any line of code runs.
+
+Example
+
+console.log(a); // undefined
+var a = 10;
+
+
+What JS internally does during the scan phase:
+
+a → undefined   (memory created)
+
+Then during execution phase:
+
+a = 10
+
+So this works because:
+
+The declaration is hoisted, but the value is assigned later
+
+------------------------------------------------------------------------
+
+🟦 Hoisting with let
+
+JavaScript scans the whole file, finds let declarations, and creates memory for them — but does NOT assign undefined.
+They stay in a Temporary Dead Zone (TDZ) until the declaration line is executed.
+
+Example
+console.log(a); // ❌ ReferenceError
+let a = 10;
+
+What happens internally
+
+Scan phase
+
+a → <uninitialized>   (TDZ)
+
+Execution phase
+
+let a = 10  → now value is assigned
+
+Because a has no value yet, accessing it before the declaration is illegal.
+
+------------------------------------------------------------------------
+🟥 Hoisting with const
+
+JavaScript scans the whole file, creates memory for const, but keeps it uninitialized in TDZ — and it must be assigned immediately at the declaration line.
+
+Example
+console.log(b); // ❌ ReferenceError
+const b = 20;
+
+Internally
+
+Scan phase
+
+b → <uninitialized>   (TDZ)
+
+
+Execution phase
+
+const b = 20 → assigned once, then locked 🔒
+
+------------------------------------------------------------------------
+SUMMARY ON HOISTING for var,let and const :
+------------------------------------------
+
+var is hoisted with undefined,
+let and const are hoisted too — but locked in TDZ until their line executes.
+
+-----------------------------------------------------------
+
+THE STORY BEHIND HOISTING :
+---------------------------
+Why did JavaScript introduce hoisting for var?
+
+Because JavaScript was designed to be forgiving and beginner-friendly.
+
+In 1995, JavaScript was created in just 10 days for non-programmers writing small scripts inside HTML pages.
+People wrote code like this:
+
+total = price + tax;
+var price = 100;
+var tax = 10;
+
+
+In strict languages like Java or C, this would crash.
+But JS designers wanted this to work without errors.
+
+So they said:
+
+“Before running the code, scan the whole file and register all var variables first.”
+
+That decision created hoisting.
+
+
+
+
+https://forms.office.com/r/DEsHL4BC3m

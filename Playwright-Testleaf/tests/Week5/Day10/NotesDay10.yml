@@ -1,0 +1,378 @@
+📑 Agenda for Week 5 Day 2: File Handling & Advanced Data Parameterization
+
+🎯 [Focus: Advanced Data Parameterization and Test Annotation(Hooks]  
+
+📆 Date: 08 February [Sunday]  
+
+🕝 Session Highlights
+
+⿡ Recap
+* Quick review of key learnings from previous sessions. 
+
+1. *File Upload*  
+* Uploading files using file input elements.  
+* Working with drag-and-drop style uploads.  
+* Example: Automating resume uploads in job portals.
+
+2. *File Download*  
+* Automating file download process in Playwright.  
+* Setting download paths and verifying file content. 
+
+Breakout Session : File upload & File Download in leafground
+
+3. *Reading JSON Files*  
+* Importing and parsing JSON test data.   
+* Best practices for maintaining test data files.
+
+4. *Reading CSV and JSON Files*  
+* Importing and parsing CSV/JSON test data.   
+* Best practices for maintaining test data files.
+
+Breakout Session : CSV Data parameterization using Salesforce Application.
+
+5. *Reading ENV Files*  
+* Importing and parsing ENV test data.   
+* Best practices for maintaining test data files. 
+
+6. *Hooks Test Annotation*
+* Different test annotation used as part of testcase execution.
+
+
+🕡 Wrap Up / Q&A  
+
+📝 Keep your physical notebook and pen handy to sketch out ideas!
+
+------------------------------------------------------------------------------------
+
+# File Upload
+--------------
+
+### **Definition**
+
+Uploading files into a web application using Playwright.
+Playwright simulates attaching files to `<input type="file">` elements or drag-and-drop areas.
+
+---
+
+### **When `type="file"` is Present**
+
+Directly set the file(s) to the input element.
+
+const fileInput = page.locator('input[type="file"]');
+await fileInput.setInputFiles('tests/data/sample.pdf');
+
+* **Multiple Files:**
+
+await fileInput.setInputFiles(['file1.png', 'file2.png']);
+
+---
+
+### **When `type="file"` is Not Present (Custom Upload UI)**
+
+Some apps hide the `<input>` or use a styled button (drag-drop zones).
+Steps:
+
+1. Inspect and find the hidden file input.
+2. Use `setInputFiles` on that hidden element.
+
+
+const hiddenInput = page.locator('#hidden-file-input');
+await hiddenInput.setInputFiles('tests/data/sample.pdf');
+
+
+If the input is not accessible at all → Workaround is to use OS-level automation (not Playwright’s scope).
+
+---
+
+# File Download
+----------------
+
+### **Definition**
+
+Handling files downloaded by the application (clicking "Download" links/buttons).
+
+---
+
+### **Usage**
+
+Playwright provides a `page.waitForEvent('download')` listener.
+
+
+const [download] = await Promise.all([
+  page.waitForEvent('download'),      // Wait for download event
+  page.click('text=Download Report')  // Trigger download
+]);
+
+// Save to desired path
+await download.saveAs('downloads/report.pdf');
+
+// Get file path in temp location
+console.log(await download.path());
+
+
+**Notes:**
+
+* Default: Playwright saves downloads in a temporary directory.
+* Always use `Promise.all` to avoid missing the download event.
+--------------------------------------------------------------------------------------
+
+## How to use timeStamp while saving a downloaded file. :
+
+We want a **safe unique time string** to use in a filename.
+
+Because this is invalid in Windows:
+
+```
+Download_10:45:30.png   ❌ (colon not allowed)
+```
+
+So we convert time into a **file-friendly format**.
+
+---
+
+## Line 1
+
+```ts
+new Date()
+```
+
+Means:
+👉 *“Give me the current date and time of the system”*
+
+Example output (internally):
+
+```
+Sun Feb 08 2026 10:45:30 GMT+0530
+```
+
+---
+
+## Line 2
+
+```ts
+.toISOString()
+```
+
+Means:
+👉 *“Convert the date into a standard string format”*
+
+Output:
+
+```
+2026-02-08T10:45:30.123Z
+```
+
+This is:
+
+```
+YYYY-MM-DDTHH:MM:SS.msZ
+```
+
+---
+
+## Line 3 (Most Important)
+
+```ts
+.replace(/[:.]/g, "-")
+```
+
+Means:
+👉 *“Replace all `:` and `.` with `-`”*
+
+Because Windows **does not allow** `:` in filenames.
+
+So:
+
+Before:
+
+```
+2026-02-08T10:45:30.123Z
+```
+
+After:
+
+```
+2026-02-08T10-45-30-123Z
+```
+
+---
+
+## Final Result Stored in `timestamp`
+
+```ts
+const timestamp = "2026-02-08T10-45-30-123Z"
+```
+
+Used in filename:
+
+```
+Download_2026-02-08T10-45-30-123Z.png
+```
+
+---
+
+## One-Line Analogy for Learners
+
+> "We take current time → convert to string → clean it so Windows accepts it as a filename."
+
+---
+
+## Interview-Ready Explanation
+
+If asked in interview:
+
+> *“We use `toISOString()` to get a standard timestamp and `replace()` to remove invalid filename characters, so each downloaded file is uniquely and safely named.”*
+
+
+------------------------------------------------------------------------
+Classroom 
+
+
+
+
+
+# Data Parameterization with JSON
+
+---
+
+### **Definition**
+
+Feeding test data from external JSON files instead of hardcoding values.
+Useful for **data-driven testing**.
+
+# Data Parameterization with CSV
+---
+### **Definition**
+
+Reading test data from CSV files and running tests with multiple data sets.
+CSV is widely used in organizations for bulk test data (rows = test cases, columns = input fields).
+
+Usage
+1. Sample CSV (testData.csv):
+username,password
+testuser,pass123
+wrong,123
+admin,admin@123
+
+Step 1:
+Install csv : command - npm install csv-parse
+
+Step 2:
+create a .csv file under Data folder
+
+Step3 :
+
+Create a .spec.ts and parse data from csv file similar to the sample script.
+
+----------------------------------------------------------------------------------------
+IMPORTANT CONCEPT TO BE UNDERSTOOD :
+------------------------------------
+
+File (CSV / JSON / Excel / DB)
+        ↓
+   Parser / Loader
+        ↓
+JavaScript Objects (RAM)
+        ↓
+Used by Playwright
+
+Playwright never works with files.
+It always works with objects in memory.
+
+Files are dead data.
+JavaScript objects are living data.
+Every framework first converts files into objects.
+
+CSV/JSON/Excel are just data formats.
+They are always converted into JavaScript objects at runtime because only objects can be processed by code.
+
+There is no such thing as “using CSV/JSON in code”.
+
+You always use:
+
+JavaScript objects created from CSV/JSON.
+
+Files are just the source.
+Objects are the reality.
+
+# Data Parameterization with ENV
+---
+### **Definition**
+
+A .env file (short for environment file) is a simple text file used to store environment variables in the form of key-value pairs.
+
+It is commonly used in projects to separate configuration data (like URLs, API keys, database credentials, secrets) from the actual application code.
+
+------------------------------------------------------------------------------------------------
+
+The 5 real purposes of .env
+1. Security
+No secrets in source code.
+
+TOKEN=eyJhbGciOi...
+
+GitHub repo stays clean.
+
+2. Environment switching (huge)
+
+Same code runs in:
+
+dev.env   → localhost
+qa.env    → test server
+prod.env  → real server
+
+No code changes.
+Just change the file.
+
+3. CI/CD compatibility
+
+Jenkins / GitHub Actions / Docker all use env variables.
+So .env is a universal standard.
+
+4. No recompilation / rebuild
+
+Change:
+BaseUrl=https://newserver
+
+Restart program → done.
+
+No recompile. No redeploy.
+
+5. Language & tool agnostic
+
+Same .env works for:
+
+Node.js
+Java (Spring)
+Python (Django)
+Docker
+Kubernetes
+Bash
+GitHub Actions
+
+That’s rare in tech.
+
+------------------------------------------------------------
+
+# Test Annotation :
+---
+
+--> Control the behaviour of the execution.
+
+hooks -> The execution flow before and after the actual test execution.
+------
+test.beforeAll --> before all test it will be executed
+test.beforeEach --> before each test it will be executed
+test.afterEach -->  after each test it will be executed
+test.afterAll --> after all test it will be executed
+
+Other Test Annotation
+---
+
+test.only --> focus on a specific test.
+test.skip --> ignore the test from execution
+test.fixme --> track and know failures that are yet tp be fixed
+test.fail --> for negative testing --> test has to fail is the expectation
+test.slow --> double the timeout of the tests execution --> 30 s --> 60 s for the entire test execution
+test.describe --> grouping the test depending on the status of the other test.
+test.use -->use the functionalities

@@ -1,0 +1,441 @@
+
+📑 *Agenda for Week 5 Day 1: Advanced Playwright Interactions*
+
+🎯 *[ Focus: Handling real-world user interactions like alerts, windows, files, and data-driven testing ]*
+
+📆 *Date:* 07 February [Saturday]  
+
+🕝 *Session Highlights*
+
+1. Alerts Handling
+* Understanding Playwright’s support for JavaScript alerts, prompts, and confirmations.  
+* Automating acceptance or dismissal of alerts.  
+
+- Break and classroom on prompt alert using reference code.
+
+2. *Window Handling*  
+* Understanding multiple browser contexts and tabs/windows.  
+* Switching between windows and handling pop-ups.  
+* Real-time examples: Flipkart product page.
+
+- Classroom in window handling using the reference code.
+
+3. *File Upload*  
+* Uploading files using file input elements.  
+* Working with drag-and-drop style uploads.  
+* Example: Automating resume uploads in job portals.
+
+4. *File Download*  
+* Automating file download process in Playwright.  
+* Setting download paths and verifying file content.  
+
+5. *Reading JSON Files*  
+* Importing and parsing JSON test data.   
+* Best practices for maintaining test data files. 
+
+
+🕡 Wrap Up / Q&A  
+
+📝 Keep your physical notebook and pen handy to sketch out ideas!
+
+
+Alerts /Dialogs:
+---------------
+
+Definition: Browser pop-ups such as alert, confirm, prompt, or beforeunload triggered by JavaScript.
+
+Usage: Intercept and handle dialog events to read their message and accept or dismiss them.
+
+Syntax:
+
+page.on('dialog', async dialog => { ... }) → Listen and handle.
+
+await dialog.accept([promptText]) → Accept dialog (optionally providing input for prompts).
+
+await dialog.dismiss() → Cancel dialog.
+
+Event Listeners
+--------------
+Definition: You subscribe to an event via Playwright's event emitter system.
+
+Usage: Allows multiple listeners for the same event. No overwriting — all registered callbacks run.
+
+Syntax: page.on(eventName, callback) or page.once(eventName, callback)
+
+
+------------------------------------------------------------------------------------
+
+✅ What does page.on() mean?
+
+Think of page.on() like:
+
+“Hey Playwright, listen to this page. If something happens, tell me!”
+
+So this part:
+
+page.on(...)
+
+
+means:
+
+👉 Attach a listener to the page for some event.
+
+✅ What is 'dialog'?
+'dialog'
+
+
+This means:
+
+🔔 “I want to be notified whenever an alert box / confirm / prompt appears on this page.”
+
+In browsers, these are called JavaScript dialogs:
+
+alert()
+
+confirm()
+
+prompt()
+
+So:
+
+page.on('dialog', ...)
+
+
+means:
+
+✅ Whenever any alert, confirm, or prompt appears → run this code.
+
+✅ What is async (alert) => { ... }
+
+This is an arrow function (callback function).
+
+It means:
+
+ “When a dialog appears, Playwright will give me that dialog object in the variable called alert.”
+
+So:
+
+async (alert) => {
+
+
+means:
+
+- This function runs automatically
+- alert contains the popup box
+- async is used because:
+
+We use await alert.dismiss() inside it
+
+-------------------------------------------------------------------------------------
+
+Use filter() only when:
+
+1. multiple similar containers exist
+
+2. and you must scope inside one specific block
+
+----------------------------------------------------------------------------------------
+Question:
+
+Write a Playwright test to demonstrate handling JavaScript alerts using page.on():
+
+1. Launch any banking website- Open Canara Bank Net Banking page - https://www.canarabank.bank.in/pages/net-banking
+2. Trigger an alert -click on the Net Banking link
+3. Capture the alert using an event listener.
+4. Print the alert message and type.
+5. Accept or dismiss the alert based on its type.
+
+----------------------------------------------------------------------------
+
+
+
+Window Handling
+-------------
+
+Definition: Managing new tabs or browser windows opened by the application (via window.open or links with target="_blank).
+
+Usage: Capture and control multiple pages in the same browser context.
+
+Types:
+
+Sequential Approach
+------------------
+
+Wait for the new page after the action that opens it.
+
+await actionThatOpensNewPage();
+const newPage = await context.waitForEvent('page');
+
+
+**Simpler but may risk missing the event if the page opens too quickly.
+
+Concurrent Approach (Recommended)
+-------------------
+
+Wait for the new page and trigger the action at the same time.
+
+
+const [newPage] = await Promise.all([
+  context.waitForEvent('page'),
+  actionThatOpensNewPage()
+]);
+
+**Ensures you never miss the page event.
+
+Switch between pages using:
+--------------------------
+
+context.pages();       // Returns all open pages in the context
+newPage.bringToFront(); // Focus a specific page
+
+
+----------------------------------------------------------------------------------------
+
+Classroom Activity in windows :
+------------------------------
+
+Question:
+--------
+
+Write a Playwright test to demonstrate handling multiple tabs sequentially:
+1, Launch Flipkart.(https://www.flipkart.com/)
+2, Search for "Phone".
+3, Click a result that opens in a new window/tab.
+4, Capture the new page using browserContext.
+5, Print titles of both pages.
+6, Bring the parent page to front and continue navigation.
+
+--------------------------------------------------------------------------------------
+
+## Step 1 – What you configured
+
+```ts
+use: {
+  testIdAttribute: 'data-id'
+}
+```
+
+### Meaning in simple words:
+
+You told Playwright:
+
+> “From now on, whenever I say **getByTestId**,
+> don’t look for `data-testid`,
+> instead look for `data-id`.”
+
+So you **reprogrammed Playwright’s brain**.
+
+---
+
+## Step 2 – Your code
+
+```ts
+await page.getByTestId('MOBHFSCEDQXXDXUQ')
+         .locator('.RG5Slk')
+         .click();
+```
+
+---
+
+## Layman analogy 
+
+### Imagine a shopping mall 🏬
+
+Each shop has:
+
+* a **shop number** → `data-id`
+* inside the shop → different counters (`div`, `span`, etc.)
+
+---
+
+### You tell the security guard (Playwright):
+
+> “From today, when I say *shop id*, use the **shop number board**.”
+
+That’s this:
+
+testIdAttribute = 'data-id'
+
+---
+
+### Now you say:
+
+getByTestId("MOBHFSCEDQXXDXUQ")
+
+Playwright internally does:
+
+> “Go and find the element which has:
+html
+> data-id="MOBHFSCEDQXXDXUQ"
+
+Exactly like:
+
+```css
+[data-id="MOBHFSCEDQXXDXUQ"]
+```
+
+---
+
+### Then you say:
+
+```ts
+.locator('.RG5Slk')
+```
+
+Meaning:
+
+> “Inside that shop, go to the counter named `RG5Slk`”
+
+---
+
+### Then:
+
+```ts
+.click();
+```
+
+Meaning:
+
+> “Now physically click that counter”
+---
+
+## Why this is powerful (real-life reason)
+
+Without config:
+
+```ts
+getByTestId() → only data-testid
+```
+
+With config:
+
+```ts
+getByTestId() → any attribute YOU decide
+```
+
+So your framework becomes:
+
+* readable
+* business-friendly
+* independent of HTML structure
+
+---
+
+> “We are not changing our code to match the tool.
+> We are changing the tool to match the application.”
+
+This is how we do in real time projects.
+
+*****************************************************************************************
+//div[@data-id="MOBHFSCEDQXXDXUQ"]//a//div[contains(@class,"RG")
+
+# File Upload
+--------------
+
+### **Definition**
+
+Uploading files into a web application using Playwright.
+Playwright simulates attaching files to `<input type="file">` elements or drag-and-drop areas.
+
+---
+
+### **When `type="file"` is Present**
+
+Directly set the file(s) to the input element.
+
+const fileInput = page.locator('input[type="file"]');
+await fileInput.setInputFiles('tests/data/sample.pdf');
+
+* **Multiple Files:**
+
+await fileInput.setInputFiles(['file1.png', 'file2.png']);
+
+---
+
+### **When `type="file"` is Not Present (Custom Upload UI)**
+
+Some apps hide the `<input>` or use a styled button (drag-drop zones).
+Steps:
+
+1. Inspect and find the hidden file input.
+2. Use `setInputFiles` on that hidden element.
+
+
+const hiddenInput = page.locator('#hidden-file-input');
+await hiddenInput.setInputFiles('tests/data/sample.pdf');
+
+
+If the input is not accessible at all → Workaround is to use OS-level automation (not Playwright’s scope).
+
+---
+
+# File Download
+----------------
+
+### **Definition**
+
+Handling files downloaded by the application (clicking "Download" links/buttons).
+
+---
+
+### **Usage**
+
+Playwright provides a `page.waitForEvent('download')` listener.
+
+
+const [download] = await Promise.all([
+  page.waitForEvent('download'),      // Wait for download event
+  page.click('text=Download Report')  // Trigger download
+]);
+
+// Save to desired path
+await download.saveAs('downloads/report.pdf');
+
+// Get file path in temp location
+console.log(await download.path());
+
+
+**Notes:**
+
+* Default: Playwright saves downloads in a temporary directory.
+* Always use `Promise.all` to avoid missing the download event.
+
+--------------------------------------------------------------------
+
+
+
+# Data Parameterization with JSON
+
+---
+
+### **Definition**
+
+Feeding test data from external JSON files instead of hardcoding values.
+Useful for **data-driven testing**.
+
+
+
+
+
+===========
+
+
+test(`Test to Handle alerts/dialogs`,async ({page}) => {
+    
+    await page.goto(`https://leafground.com/alert.xhtml`);
+
+    //simple alert -> alert triggered
+    await page.locator(`(//span[text()="Show"])[1]`).click();
+    await page.waitForTimeout(3000)
+
+    //confirm alert -> alert triggered
+ //   await page.locator(`(//span[text()="Show"])[2]`).click();
+    await page.locator(".card").filter({hasText:"Confirm Dialog"}).locator(`//span[text()="Show"]`).click()
+      await page.waitForTimeout(3000)
+
+     //prompt alert -> alert triggered
+  //  await page.locator(`(//span[text()="Show"])[5]`).click();
+   await page.locator(".card").filter({hasText:"Prompt Dialog"}).locator(`//span[text()="Show"]`).click()
+      await page.waitForTimeout(3000)
+
+})

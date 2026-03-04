@@ -1,0 +1,228 @@
+📑 Agenda for Week 7 Day 2: POM and Playwright Advanced Features
+🎯 Focus: Mastering POM using OOPS concept and learning advanced playwright features.
+
+📆 22nd Feb, Sunday
+
+🕝 Session Highlights
+
+⿡ Recap
+Quick review of previous learnings.
+
+1. Polymorphism
+Understanding polymorphism for flexible code design.
+Examples: Method overloading and overriding in test scenarios.
+
+2. Inheritance
+Exploring the concept of inheritance for code reuse.
+Examples: Implementing single and multilevel inheritance.
+
+3. POM (Page Object Model)
+Design pattern to enhance test maintainability and reusability.
+Examples: Creating page classes and using them in test cases.
+
+⏸ \[Break / Practice]
+
+4. Abstraction
+Using abstract classes and methods to define templates.
+Examples: Designing partially implemented base classes.
+
+5. Custom Fixture
+Creating reusable test setup using custom fixtures.
+Implementing the same in POM.
+Examples: Injecting test data, context, or utilities.
+
+-------------------------------------------------------------------
+
+Polymorphism :
+--------------
+Polymorphism is a fundamental concept in object-oriented programming that allows objects of different classes to be treated as objects of a common superclass. 
+
+
+Method Overloading :
+------------------
+Method overloading is a feature that allows a class to have more than one method with the same name, but different parameters (different type or number of parameters).
+
+Method Overriding :
+-------------------
+Method overriding is a feature that allows a subclass or child class to provide a specific implementation of a method that is already defined in its superclass or parent class.
+
+
+--------------------------------------------------------------------------------
+
+Inheritance :
+-----------
+
+1. Single Inheritance :
+
+classA{}
+classB extends A{}
+
+2. Multilevel Inheritance :
+
+class A{}
+
+class B extends A{}
+class C extends B{}
+
+3. Hierarchical inheritance 
+
+class A{}
+
+class B extends A{}
+class C extends A{}
+
+4. Hybrid Inheritance
+
+A combination of two or more types of inheritnace (e.x : multilevel and Hierarchical)
+
+
+5. Multiple Inheritance
+Typescript does not support multiple inheritnace using classes.
+Can be achieved through interface.
+
+--------------------------------------------------
+
+Page Object Model :
+
+POM means:
+
+Each web page (or module) of your application is represented by a separate class,
+and that class contains locators and methods that act on that page.
+
+login--> welcome page --> home page --> LeadPage -->CreatLead --> viewLead
+                                                ---> findLead --> VieLead --> Edit
+                                                ----> MergeLead
+                                    
+                                    
+                                    ---> Account Page -->CreatAccount --> viewAccount
+                                                ---> findAccount --> ViewAccount--> Edit
+                                                ----> MergeAccount
+Pages :
+
+login page :
+Username, Password and login
+
+welcome page :
+crmsfa and logout
+
+homePage :
+leads, accounts, contact , opportunities..
+
+leadPage :
+createLead , findLead
+
+CreateLeadPage :
+manadatoryFields
+
+ViewPage :
+Get the inner text of the created.
+
+Tests
+1. CreateLead.spec.ts
+---------------------------------------------------------
+Custom Fixture :
+
+In Playwright, a custom fixture is used to create and manage reusable objects before a test runs, and automatically provide them inside the test function.
+
+Here customFixtures.ts is extending the default Playwright test and injecting Page Object Model (POM) classes like:
+LoginPage
+WelcomePage
+HomePage
+LeadPage
+CreateLeadPage
+ViewLeadPage
+
+So instead of creating objects manually inside every test like:
+const login = new LoginPage(page)
+
+You are centralizing object creation in one place and reusing it across all tests.
+
+What custom fixture does in your project:
+
+1. Extends Playwright baseTest
+   import { test as baseTest } from "@playwright/test"
+   export const test = baseTest.extend<myFixtures>({...})
+
+2. Creates POM objects
+   Example:
+   lopfix: async ({ page }, use) => {
+   const lopobj = new LoginPage(page)
+   await use(lopobj)
+   }
+
+3. Injects them into test automatically
+   So in your spec file you can directly use:
+
+   test("Create Lead Verification", async ({ lopfix, wp, hp, lp, clp, vp }) => {
+   await lopfix.loadurl(...)
+   })
+
+Problem it solves
+
+Without fixture:
+* You must create new object in every test
+* Code duplication
+* Hard to maintain
+
+With custom fixture:
+* Centralized object creation
+* Clean test methods
+* Better scalability
+* Reusable architecture
+* Follows Hybrid Framework structure (BDD + POM + Fixture driven execution)
+
+Example
+
+Without fixture:
+test("sample", async ({ page }) => {
+const login = new LoginPage(page)
+await login.loadurl("url")
+})
+
+With fixture:
+test("sample", async ({ lopfix }) => {
+await lopfix.loadurl("url")
+})
+
+So in simple words:
+
+Custom fixture = Dependency injection mechanism in Playwright
+It automatically creates and supplies reusable objects to test methods.
+
+
+
+
+---------------------------------------------------------
+1. Interface :
+-----------------
+
+- Complete hiding of the implemented.
+- 100% abstraction.
+- Only unimplemented methods.
+
+Summarize 
+
+- class extends another class
+- abstract extends another abstract class
+- interface extends another interface
+- class extends abstract class
+- class implements interface
+- class extends abstract class im plemnets interface
+
+We cannot see implementation of your page fixture, context browser in playwright everytging is put in as interface
+
+2. Abstraction
+----------------- 
+
+abstract class :
+
+- 0 to 100% abstraction.
+- Method signature --> unimplementedmethods
+- Implemented methods --> logic 
+
+-----------------------------------------------------------------------------------------
+
+
+faker library installation :
+
+npm install @faker-js/faker@8.4.1

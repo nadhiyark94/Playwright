@@ -1,0 +1,206 @@
+In TypeScript, the situation is different from Java:
+
+TypeScript does NOT support multiple inheritance of classes
+
+TypeScript does NOT have InterfaceName.super.method()
+
+Interfaces in TypeScript do not contain implementation (normally), only structure
+
+So the Java-style diamond problem does not occur in TypeScript.
+
+
+
+TypeScript
+Interfaces = only blueprint
+No default methods
+No conflict
+No need for super
+
+
+
+
+In **TypeScript**, the situation is different from Java:
+
+* TypeScript **does NOT support multiple inheritance of classes**
+* TypeScript **does NOT have `InterfaceName.super.method()`**
+* Interfaces in TypeScript **do not contain implementation** (normally), only structure
+
+So the **Java-style diamond problem does not occur in TypeScript**.
+
+---
+
+## 1️⃣ Java vs TypeScript Concept
+
+### Java
+
+Interfaces can have **default methods**:
+
+```java
+interface A {
+ default void show() {
+   System.out.println("A");
+ }
+}
+```
+
+So conflict happens.
+
+Solution:
+
+```java
+A.super.show();
+```
+
+---
+
+### TypeScript
+
+Interfaces only define **method signatures**:
+
+```ts
+interface A {
+ show(): void;
+}
+
+interface B {
+ show(): void;
+}
+```
+
+No implementation → No conflict.
+
+---
+
+## 2️⃣ TypeScript Diamond-Like Structure
+
+Example:
+
+```ts
+interface A {
+ show(): void;
+}
+
+interface B extends A {}
+
+interface C extends A {}
+
+class D implements B, C {
+
+ show() {
+   console.log("From D");
+ }
+
+}
+```
+
+### Result
+
+✔ Works perfectly
+✔ No ambiguity
+
+Because:
+
+```text
+Interfaces = Only structure
+No default implementation
+```
+
+
+---
+
+## 4️⃣ Java vs TypeScript Comparison for multiple inheritance in interface
+
+In TypeScript we manually choose.
+
+Example:
+
+```ts
+class A {
+ show() {
+   console.log("From A");
+ }
+}
+
+class B {
+ show() {
+   console.log("From B");
+ }
+}
+
+class C {
+
+ a = new A();
+ b = new B();
+
+ show() {
+
+   this.a.show(); // like A.super.show()
+   this.b.show(); // like B.super.show()
+
+ }
+
+}
+```
+
+### Output
+
+```text
+From A
+From B
+```
+
+This is closest to:
+
+```java
+A.super.show();
+B.super.show();
+```
+
+---
+
+## 5️⃣ Explanation
+
+### Java
+
+```text
+Multiple inheritance allowed (interfaces)
+Default methods exist
+Conflict possible
+Use Interface.super.method()
+```
+
+---
+
+### TypeScript
+
+```text
+Interfaces = only blueprint
+No default methods
+No conflict
+No need for super
+```
+
+---
+
+**Question:**
+How is Diamond Problem handled in TypeScript?
+
+**Answer:**
+
+> TypeScript does not have the diamond problem like Java because interfaces only define method signatures and do not contain implementations. Since there is no method implementation in interfaces, there is no ambiguity. Therefore TypeScript does not need InterfaceName.super.method().
+
+---
+
+##  Conclusion
+
+**Java:**
+
+```text
+Interfaces → Need super
+```
+
+**TypeScript:**
+
+```text
+Interfaces → No super needed
+```

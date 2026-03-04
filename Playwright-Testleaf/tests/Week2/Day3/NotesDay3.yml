@@ -1,0 +1,204 @@
+📑 Agenda for Week2 Day1 - Get Started with Playwright
+🎯 [ Focus: Kickstart Playwright automation with hands-on basics ]
+ 
+📆 Date: 17 January [Saturday]
+ 
+🕝 Session Highlights
+
+ Recap 
+- Key takeaways from the previous session:  
+Introduction to JavaScript, Mastering Variables, Operators, Conditional Statements,
+
+1. Diving into Loops
+* For Loops, While Loops, and Iteration Techniques  
+* Practice with Automation Use Cases  
+
+2. String
+* Exploring Methods and Real-world Use Cases
+* [Practice] Solve String-based Problems
+
+3. Functions
+* Different types of functions -> Named function, Function Expression/ Anonyuomus Function, Arrow Function, Call back function
+
+4. Understanding Playwright Architecture
+* Core Components and How They Interact  
+
+
+🕡 Wrap Up / Q&A 
+
+📝 Keep your physical notebook and pen handy to sketch out ideas!
+
+
+Notes :
+------
+
+let course = "Playwright"
+
+   Length | Index | Negative Index   
+P - 1        0        -10
+l - 2        1        -9
+a - 3        2        -8
+y - 4        3        -7
+w - 5        4        -6
+r - 6        5        -5
+i - 7        6        -4
+g - 8        7        -3
+h - 9        8        -2
+t -10        9        -1
+---------------------------------------------------------------------------------------
+
+
+WHY DO WE USE NEGATIVE INDEX ?
+
+Negative indexes in `slice()` are **very useful in real-world programming** because they help you extract parts of a string *from the end*, without calculating the exact length.
+
+Here are the most common real use cases:
+
+---
+
+## ✅ **1. Getting last few characters (like file extension)**
+
+Example: Extracting file extension dynamically.
+
+let filename = "document.pdf";
+let ext = filename.slice(-3); 
+console.log(ext);  // pdf
+
+Why useful?
+→ You don’t need to know the string length or do `filename.length - 3`.
+
+---
+
+## ✅ **2. Hiding sensitive info (masking mobile, email, card numbers)**
+
+let card = "1234 5678 9876 5432";
+let masked = "XXXX XXXX XXXX " + card.slice(-4);
+
+console.log(masked); // XXXX XXXX XXXX 5432
+
+Real use case: banking apps, OTP screens.
+
+---
+
+## ✅ **3. Extracting last N characters of logs, responses, or IDs**
+
+let logId = "LOG_2025_12_02_ABCDEFG";
+console.log(logId.slice(-7));  // ABCDEFG
+```
+
+Useful in debugging systems, log trackers, and APIs.
+
+-----------------------------------------------------------------------------------
+
+## **Why not just use positive indexes?**
+
+Yes, you *can* extract the last 3 characters using **start index + end index**, but it becomes **less practical and less readable**.
+
+Let’s see how.
+
+
+# ✅ Using start index & end index (without negative index)
+
+To extract `"pdf"` from `"document.pdf"`:
+
+### Step 1: Calculate string length
+
+```js
+let filename = "document.pdf";    // length = 12
+```
+
+### Step 2: You want last 3 chars → start at index `12 - 3 = 9`
+
+### Step 3: End index is the string length (12)
+
+```js
+let ext = filename.slice(9, 12);
+console.log(ext);  // pdf
+```
+
+---
+
+# ❗ Problem with this approach
+
+You **must calculate**:
+
+* string length
+* start index by doing `length - 3`
+* supply an explicit end index
+
+This becomes harder when:
+
+* filename string length changes
+* dynamic values come from API/user inputs
+
+Example:
+If filename is `"report.final.version.pdf"`, you *cannot know* the extension length easily.
+
+---
+
+# ✅ Negative index wins
+
+One simple line:
+
+```js
+filename.slice(-3);  // pdf
+```
+
+→ Autocalculates the start index
+→ End index automatically becomes end of string
+→ Works with any string length
+→ More readable
+
+---
+
+#  Conclusion
+
+### ✔️ Yes, you *can* use start + end index
+
+### ❌ But it becomes complicated and not dynamic
+
+### ✔️ Negative index is the best choice for extracting “last n characters”
+
+---
+
+## Summary
+
+Negative indexes help when:
+
+* You want to extract from **end of string**
+* You don’t know/need the **string length**
+* You want cleaner, shorter, more readable code
+* You deal with **file names, URLs, logs, masks, IDs, formatting**
+
+------------------------------------------------------------------------------------------
+
+Sort :
+
+✅ 1. Sort characters in a string alphabetically
+let str = "playwright";
+let sorted = str.split('').sort().join('');
+console.log(sorted);
+
+Output:
+aghilprrtyw
+
+✅ 2. Sort characters in reverse order
+let str = "javascript";
+let sortedDesc = str.split('').sort().reverse().join('');
+console.log(sortedDesc);
+
+✅ 3. Sort an array of strings
+
+If you have a list of strings:
+
+let names = ["Ravi", "Dinesh", "Mani", "Arun"];
+names.sort();
+console.log(names);
+
+Output:
+["Arun", "Dinesh", "Mani", "Ravi"]
+
+✅ 4. Sort string words alphabetically
+let sentence = "playwright is powerful";
+let sortedWords = sentence.split(' ').sort().join(' ');
+console.log(sortedWords);

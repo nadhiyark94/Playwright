@@ -1,0 +1,229 @@
+📑 Agenda for Week 3 Day 1: Playwright Features
+🎯 [ Focus: Mastering the features of Playwright on Locators, Dropdown & Assertions]  
+
+📆 Date: 24 January [Saturday]
+
+1. CSS Selectors  
+* Basic and Advanced CSS Selector Techniques.
+
+* BREAKOUT 1 : Hands-on Example: Using ID, Class, and Attribute Selectors.
+* BREAK
+
+2. XPath Selectors
+* Relative vs. Absolute XPath: What's Better? 
+* Advanced relative Xpath- Axes  
+* Practical Use Cases with XPath Examples.
+
+3. Handling Dropdowns  
+* Understanding dropdown types: 'select' tags and custom dropdowns.  
+* Selecting options by value, label, or index.
+
+* BREAKOUT 2 : Hands-on Example: Handling Dropdowns in leaftaps lead creation.
+
+4. Assertions Using the 'expect' Library  
+* Commonly used assertions and their applications. 
+* Salesforce live example.
+
+
+NotesDay5 :
+-----------
+
+DOM Structure :
+--------------
+Document Object Model (DOM) is a programming interface for web documents. It represents the page so that programs can change the document structure, style, and content. The DOM represents the document as nodes and objects; that way, programming languages can interact with the page.
+
+<html>
+  <head>
+    <title>Testleaf Page</title>
+  </head>
+  <body>
+    <div>
+      <h1>Welcome to Testleaf</h1>
+      <p>This is a sample paragraph.</p>
+
+      <!-- Label and Textbox -->
+      <label for="username">Enter Name:</label>
+      <input type="text" id="username" name="username">
+
+    </div>
+  </body>
+</html>
+
+-------------------------------------------------------------------------------------
+
+CSS Selectors :
+-----------------
+1. By ID :
+Syntax : #idValue 
+Example : #username
+
+2. By Class :
+Syntax : .classValue
+Example : .inputLogin
+
+3. By Attribute :
+[tagName[attribute='value']]
+Example : input[id='username']
+
+4. Descendant Combinator 
+Example : form input
+
+5. Child Combinator
+Example : form > input
+
+6. Adjacent Sibling Combinator
+Example : label + input
+
+7. General Sibling Combinator
+Example : label ~ input
+
+-------------------------------------------------------------------------------------
+
+Playwright locator methods :
+----------------------------
+
+nth(), first(), and last() are Playwright Locator API methods.
+
+They help you choose which element to act on when a locator matches multiple elements.
+
+Strict Mode Violation Error :
+-----------------------------
+When a locator matches more than one element, Playwright throws an error to prevent ambiguity.
+To fix this, use nth(), first(), or last() to specify which element you want to interact with.
+
+-------------------------------------------------------------------------------------
+What is a page fixture :
+------------------------
+In Playwright, a page fixture is a predefined setup that provides a fresh browser page for each test. 
+It ensures that tests run in isolation, preventing interference from previous tests. 
+The page fixture is part of Playwright's test runner and is automatically available in test functions.
+
+-------------------------------------------------------------------------------------
+Classroom Activity :
+----------------------
+
+Write a Playwright script to perform the following actions on the Salesforce login page:
+1. Navigate to the Salesforce login page.
+2. Use different CSS selector strategies (ID, Class, Attribute) to locate the username and password fields.
+3. Enter sample credentials into the username and password fields.
+4. Click the login button using a CSS selector.
+5. Verify that the login was successful by checking for a specific element on the landing page.
+
+Sample credentials :
+Username:dilipkumar.rajendran@testleaf.com
+Password: TestLeaf@2025
+-------------------------------------------------
+
+Attribute priority :
+-----------------------
+1️⃣ aria-label – Accessibility-based, stable, Playwright’s top choice
+2️⃣ id – Unique, fast
+3️⃣ name – Usually stable, not always unique
+4️⃣ class – For styling, changes often → least reliable
+
+
+Text based 
+-----------
+1. text()
+
+
+Advanced Locators in Playwright :
+--------------------------
+
+1, Relationship Between Parent - Child, Grandparent - Grandparent :
+--------------------------------------------------------
+
+Parent To Child   : 
+------------------
+( parent realtive xpath)/(tagName of child) --> //form[@id="login"]/p
+
+GrandParent to Grandchild Relation   :
+--------------------------------
+GrandParent relative xpath//tagName of grand child --> //form[@id="login"]//input
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Child to Parent :      
+----------------
+Child relative xpath/parent::parent tagName --> //input[@id="username"]/parent::p
+
+Grandchild to grandparent :
+-----------------------------
+GrandChild relative xpath/ancestor::tagName of grand parent --> //input[@id="password"]/ancestor::p
+
+************************************************************************************************
+
+2, Relationship Between Siblings:
+----------------------------
+
+Younger sibling to Elder Sibling :
+-----------------------------------
+(Younger sibling relative xpath)/preceding-sibling::tagName of elder sibling --> //input[@id='username']/preceding-sibling::label
+
+Elder sibling to younger sibling :
+----------------------------------
+(Elder sibling relative xpath)/following-sibling::tagName of younger sibling --> //label[text()='Username']/following-sibling::input
+
+
+************************************************************************************************
+
+3, Relationship Between Cousins:
+----------------------------
+
+Elder Cousin to Younger Cousin :
+--------------------------------
+Elder cousing relative xpath/following::tagName of younger Cousin --> //input[@id="username"]/following::label
+
+
+Younger Cousin to Elder Cousin:
+-------------------------------
+Younger cousin xpath/preceding::tagName of Elder cousin --> //label[text()='Password']/preceding::input
+
+
+
+Commonly used Commands :
+------------------------
+
+To create a playwright file - filename.spec.ts
+
+To run the test file - npx playwright test filename.spec.ts
+
+To open the test report - npx playwright show-report
+
+
+Default mode - headless
+
+
+
+
+
+
+
+
+Maximize Screen size in chromium : 
+--------------------------------
+
+  {
+      name: 'chromium',
+      use: { browserName:"chromium", 
+        viewport:null, // disable the deafult 1280x720
+        launchOptions:{
+          args:['--start-maximized'],
+        },
+      },
+    }, 
+
+
+
+Maximize Screen size in firefox : 
+--------------------------------
+
+     {
+      name: 'firefox',
+      use: { browserName:"firefox", 
+        viewport:{ width: 1920, height: 1080 }, // disable the deafult 1280x720
+        launchOptions:{
+          args:['--start-maximized'],
+        }
+}
+}

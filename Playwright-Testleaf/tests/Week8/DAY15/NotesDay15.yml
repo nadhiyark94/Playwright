@@ -1,0 +1,78 @@
+📑 Agenda for Week 8 Day 1: Abstraction - POM, JIRA Integration and Playwright Advanced Features
+🎯 Focus: Mastering POM using OOPS concept, JIRA integration and learning advanced playwright features.
+
+📆 28th Feb, Saturday
+
+🕝 Session Highlights
+
+⿡ Recap
+Quick review of previous learnings.
+
+1. Abstraction                 
+Using abstract classes and methods to define templates.
+Implementing the same in POM.
+Examples: Designing partially implemented base classes.
+
+2. Jira Integration
+Linking test results with Jira issues.
+Automating status updates and reporting.
+
+
+3. Test Annotations
+* Enhancing test readability and control using annotations.
+* Examples: Skipping, focusing, or tagging specific tests.
+
+Notes :
+------
+
+1. Interface :
+-----------------
+
+- Complete hiding of the implemented.
+- 100% abstraction.
+- Only unimplemented methods.
+
+Summarize 
+
+- class extends another class
+- abstract extends another abstract class
+- interface extends another interface
+- class extends abstract class
+- class implements interface
+- class extends abstract class implemnets interface
+
+We cannot see implementation of your page fixture, context browser in playwright everytging is put in as interface
+
+2. Abstraction
+----------------- 
+
+abstract class :
+
+- 0 to 100% abstraction.
+- Method signature --> unimplementedmethods
+- Implemented methods --> logic 
+
+------------------------------------------------------------------------------------
+
+# Test Annotation :
+---
+
+--> Control the behaviour of the execution.
+
+hooks -> The execution flow before and after the actual test execution.
+------
+test.beforeAll --> before all test it will be executed
+test.beforeEach --> before each test it will be executed
+test.afterEach -->  after each test it will be executed
+test.afterAll --> after all test it will be executed
+
+Other Test Annotation
+---
+
+test.only --> focus on a specific test.
+test.skip --> ignore the test from execution
+test.fixme --> track and know failures that are yet tp be fixed
+test.fail --> for negative testing --> test has to fail is the expectation
+test.slow --> double the timeout of the tests execution --> 30 s --> 60 s for the entire test execution
+test.describe --> grouping the test depending on the status of the other test.
+test.use -->use the functionalities

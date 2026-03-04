@@ -1,0 +1,67 @@
+📑 Agenda – Day 01 | Introduction to JavaScript
+⏱ Total Duration: 4 Hours
+
+Playwright Features Overview 
+Duration: 30 mins
+
+Introduction to JavaScript
+Duration: 45 mins
+
+Break
+Duration: 10–15 mins
+
+Primitive Data Types
+Duration: 45 mins
+
+About keyword var
+Duration: 45 mins
+
+Breakout Session (Hands-on / Setup Support)
+Duration: 20–30 mins
+
+Variables: var, let, const
+Duration: 45 mins
+
+
+---------------------------------------------------
+
+Notes :
+-------
+
+
+Naming Conventions in JavaScript
+
+=> File Names :
+--------------
+
+camelCase
+
+Example:
+
+loginPage.js
+userProfile.js
+
+=> Variables :
+-------------
+
+camelCase
+
+Start with a lowercase letter
+
+Example:
+
+isActive
+userName
+totalAmount
+
+=> Classes
+-----------
+
+PascalCase
+
+Start with an uppercase letter
+
+Example:
+
+class LoginPage { }
+class UserService { }

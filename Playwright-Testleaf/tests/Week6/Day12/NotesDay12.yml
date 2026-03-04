@@ -1,0 +1,198 @@
+📑 Agenda for Week 06 Day 02: Playwright with REST API Integration
+
+🎯 [ Focus: Integrating Playwright with REST APIs for End-to-End Automation Testing ]
+
+📆 [15 Feb. Sunday]  
+
+🕝 Session Highlights  
+
+⿡ Recap  
+* Quick review of key learnings from previous sessions.  
+
+⿢ Implementation in Postman - POST & GET Lead Without Global Variable [Salesforce]  
+* Demonstration: Creating and retrieving leads.  
+
+⿤ Implementation in Postman - POST & GET Lead With Global Variable  
+* Demonstration: Using global variables for better test management.  
+
+
+⿦ APIRequest, APIRequestContext, APIResponse  
+* Overview of these key Playwright API concepts.  
+
+⿧ Status Code, Response Body & Response Time  
+* Understanding and validating API response attributes.  
+
+⿨ POST Call (Creating a Lead)  
+* Demonstration of making POST requests in Playwright.  
+
+⿩ GET Call (Retrieving the Lead)  
+* Retrieving data using GET requests in Playwright.  
+
+ DELETE Call (Deleting the Lead)  
+* Automating the deletion of records using DELETE requests.  
+
+ 
+
+🕡 Practice/Wrap
+
+📝 Keep your physical notebook and pen handy to sketch out ideas!
+
+
+Notes:
+
+creating page reference in playwright :
+
+const browser = chromium.launch() --> Connect btowser engine
+const context = browser.newContext() --> Window launched
+const page = context.newPage() --> a tab is loaded in that particular Window
+
+In playwright API testing happens by directly hitting your CDP network tabs :
+
+creating request reference in playwright using "APIRequestContext" :
+  // 1. Create a new API context (like creating a browser context)
+  const apiContext = await request.newContext(); //Creates a new API request context (like an isolated API session)
+
+  // 2. Send API request (GET, POST, PUT, DELETE, etc.)
+  const response = await apiContext.post('https://reqres.in/api/users/2'); //Sends a GET request
+
+  // 3. Validate response
+  console.log(await response.status());       // 200
+
+APIRequestContext--> Interface provided by Playwright to make your API calls.
+
+**********************************************************************************
+Frequently Asked Questions :
+----------------------------
+
+### What response.json() really does
+
+When you call an API (like ServiceNow’s), it sends back data in JSON text format, for example:
+
+✅ response.json() → JSON string ➜ object
+
+
+**Deserialization** is the process of **converting received JSON back into a TypeScript object**.
+
+📄 JSON →  Object
+
+
+###Why encoding is needed (and not plain username/password)
+
+- HTTP headers only accept ASCII text, not special characters like %, *, etc.
+
+- Base64 encoding ensures your credentials are transmitted safely as plain text (not encrypted, but properly formatted).
+
+- ServiceNow (and most APIs) expects credentials in this Base64 form for Basic Auth requests — if you send raw username and password, it won’t recognize them.
+
+----------------------------------------
+
+### Using nested JSON to retrieve below line:
+
+   console.log(responseBody.result.sys_id);
+
+------------------------------------------------
+
+responseBody :
+
+{
+  result: {
+    parent: '',
+    made_sla: 'true',
+    caused_by: '',
+    watch_list: '',
+    upon_reject: 'cancel',
+    sys_updated_on: '2026-02-15 11:31:54',
+    child_incidents: '0',
+    hold_reason: '',
+    origin_table: '',
+    task_effective_number: 'INC0010137',
+    approval_history: '',
+    number: 'INC0010137',
+    resolved_by: '',
+    sys_updated_by: 'admin',
+    opened_by: {
+      link: 'https://dev267889.service-now.com/api/now/table/sys_user/6816f79cc0a8016401c5a33be04be441',
+      value: '6816f79cc0a8016401c5a33be04be441'
+    },
+    user_input: '',
+    sys_created_on: '2026-02-15 11:31:54',
+    sys_domain: {
+      link: 'https://dev267889.service-now.com/api/now/table/sys_user_group/global',
+      value: 'global'
+    },
+    state: '1',
+    route_reason: '',
+    sys_created_by: 'admin',
+    knowledge: 'false',
+    order: '',
+    calendar_stc: '',
+    closed_at: '',
+    cmdb_ci: '',
+    delivery_plan: '',
+    contract: '',
+    impact: '3',
+    active: 'true',
+    work_notes_list: '',
+    business_service: '',
+    business_impact: '',
+    priority: '5',
+    sys_domain_path: '/',
+    rfc: '',
+    time_worked: '',
+    expected_start: '',
+    opened_at: '2026-02-15 11:31:54',
+    business_duration: '',
+    group_list: '',
+    work_end: '',
+    caller_id: '',
+    reopened_time: '',
+    resolved_at: '',
+    approval_set: '',
+    subcategory: '',
+    work_notes: '',
+    universal_request: '',
+    short_description: 'Network issue created through PLAYWRIGHT API',
+    close_code: '',
+    correlation_display: '',
+    delivery_task: '',
+    work_start: '',
+    assignment_group: '',
+    additional_assignee_list: '',
+    business_stc: '',
+    cause: '',
+    description: '',
+    origin_id: '',
+    calendar_duration: '',
+    close_notes: '',
+    notify: '1',
+    service_offering: '',
+    sys_class_name: 'incident',
+    closed_by: '',
+    follow_up: '',
+    parent_incident: '',
+    sys_id: '86ac024283cf72101788cd19feaad320',
+    contact_type: '',
+    reopened_by: '',
+    incident_state: '1',
+    urgency: '3',
+    problem_id: '',
+    company: '',
+    reassignment_count: '0',
+    activity_due: '',
+    assigned_to: '',
+    severity: '3',
+    comments: '',
+    approval: 'not requested',
+    sla_due: '',
+    comments_and_work_notes: '',
+    due_date: '',
+    sys_mod_count: '0',
+    reopen_count: '0',
+    sys_tags: '',
+    escalation: '0',
+    upon_approval: 'proceed',
+    correlation_id: '',
+    location: '',
+    category: 'inquiry'
+  }
+}
